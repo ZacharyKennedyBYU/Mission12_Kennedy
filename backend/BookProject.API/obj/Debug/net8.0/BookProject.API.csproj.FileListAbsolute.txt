@@ -70,4 +70,11 @@ C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\obj\Debug\net8.
 C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\obj\Debug\net8.0\ref\BookProject.API.dll
 C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\package-lock.json
 C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\obj\Debug\net8.0\BookProject.API.sourcelink.json
-C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\web.config
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\appsettings.Development.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\appsettings.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\BookProject.API.deps.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\BookProject.API.runtimeconfig.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\BookProject.API.staticwebassets.endpoints.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\publish\package-lock.json
+C:\Users\thebi\Desktop\Mission11_Kennedy\backend\BookProject.API\bin\Debug\net8.0\Bookstore.sqlite
