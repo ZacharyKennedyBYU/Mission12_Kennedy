@@ -6,7 +6,7 @@ function CategoryFilter({selectedCategories, setSelectedCategories}: {selectedCa
     useEffect(() => {
         const fetchCategories =  async () => {
             try{
-                const response = await fetch('https://localhost:5000/api/Book/GetBookTypes');
+                const response = await fetch('ttps://bookproject-kennedy-backend-h7cwevgmdqb4gedu.eastus-01.azurewebsites.net/api/Book/GetBookTypes');
                 const data = await response.json();
 
                 setCategories(data);

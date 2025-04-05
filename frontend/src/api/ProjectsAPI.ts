@@ -27,7 +27,7 @@ export const fetchBooks = async (
     `${BASE_URL}/AllProjects?pageHowMany=${pageSize}&pageNum=${pageNum}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ''}`,
     {
       credentials: 'include',
-      mode: 'cors'
+      mode: 'cors',
     }
   );
 
@@ -42,7 +42,7 @@ export const fetchBooks = async (
 export const getBook = async (bookId: number): Promise<Book> => {
   const response = await fetch(`${BASE_URL}/${bookId}`, {
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
   });
 
   if (!response.ok) {
@@ -61,7 +61,7 @@ export const addBook = async (book: Omit<Book, 'bookID'>): Promise<Book> => {
     },
     body: JSON.stringify(book),
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
   });
 
   if (!response.ok) {
@@ -80,7 +80,7 @@ export const updateBook = async (book: Book): Promise<Book> => {
     },
     body: JSON.stringify(book),
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
   });
 
   if (!response.ok) {
@@ -95,7 +95,7 @@ export const deleteBook = async (bookId: number): Promise<void> => {
   const response = await fetch(`${BASE_URL}/${bookId}`, {
     method: 'DELETE',
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
   });
 
   if (!response.ok) {

@@ -19,9 +19,21 @@ builder.Services.AddDbContext<BookDBContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("BookConnection"))
            .LogTo(Console.WriteLine, LogLevel.Information));
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("https://icy-grass-0f289be1e.6.azurestaticapps.net")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend")
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,9 +42,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x.WithOrigins("http://localhost:3000", "http://localhost:5173")
-    .AllowAnyHeader()
-    .AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
