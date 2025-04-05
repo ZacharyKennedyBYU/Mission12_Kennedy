@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/5d95f7f7-3375-44fe-ab0f-7918390f2d66/resourceGroups/appsvc_windows_eastus/providers/Microsoft.Web/sites/BookProject-Kennedy-Backend",
+  "appService.deploySubpath": "backend\\BookProject.API\\publish"
+}
