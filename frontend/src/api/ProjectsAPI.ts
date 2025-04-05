@@ -24,7 +24,11 @@ export const fetchBooks = async (
     : '';
 
   const response = await fetch(
-    `${BASE_URL}/AllProjects?pageHowMany=${pageSize}&pageNum=${pageNum}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ''}`
+    `${BASE_URL}/AllProjects?pageHowMany=${pageSize}&pageNum=${pageNum}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ''}`,
+    {
+      credentials: 'include',
+      mode: 'cors'
+    }
   );
 
   if (!response.ok) {
@@ -36,7 +40,10 @@ export const fetchBooks = async (
 };
 
 export const getBook = async (bookId: number): Promise<Book> => {
-  const response = await fetch(`${BASE_URL}/${bookId}`);
+  const response = await fetch(`${BASE_URL}/${bookId}`, {
+    credentials: 'include',
+    mode: 'cors'
+  });
 
   if (!response.ok) {
     throw new Error(`API error: ${response.status} ${response.statusText}`);
@@ -53,6 +60,8 @@ export const addBook = async (book: Omit<Book, 'bookID'>): Promise<Book> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(book),
+    credentials: 'include',
+    mode: 'cors'
   });
 
   if (!response.ok) {
@@ -70,6 +79,8 @@ export const updateBook = async (book: Book): Promise<Book> => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(book),
+    credentials: 'include',
+    mode: 'cors'
   });
 
   if (!response.ok) {
@@ -83,6 +94,8 @@ export const updateBook = async (book: Book): Promise<Book> => {
 export const deleteBook = async (bookId: number): Promise<void> => {
   const response = await fetch(`${BASE_URL}/${bookId}`, {
     method: 'DELETE',
+    credentials: 'include',
+    mode: 'cors'
   });
 
   if (!response.ok) {
