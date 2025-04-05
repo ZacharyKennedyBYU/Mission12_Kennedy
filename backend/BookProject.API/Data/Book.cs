@@ -19,7 +19,7 @@ namespace BookProject.API.Data
        [Required]
        public string Category { get; set; }
        [Required]
-       public string PageCount { get; set; }
+       public int PageCount { get; set; }
        [Required]
        public float Price { get; set; }
 

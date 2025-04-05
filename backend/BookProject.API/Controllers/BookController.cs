@@ -1,6 +1,7 @@
 ﻿using BookProject.API.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 
 namespace BookProject.API.Controllers
@@ -13,12 +14,11 @@ namespace BookProject.API.Controllers
         public BookController(BookDBContext temp) => _bookContext = temp;
 
         [HttpGet("AllProjects")]
-        public IActionResult Get(int pageHowMany = 5, int pageNum = 1, bool sortByTitle = true, string sortDirection = "asc", [FromQuery] List<string>? bookTypes = null)
+        public async Task<IActionResult> Get(int pageHowMany = 5, int pageNum = 1, bool sortByTitle = true, string sortDirection = "asc", [FromQuery] List<string>? bookTypes = null)
         {
-            
             var query = _bookContext.Books.AsQueryable();
             
-            if (bookTypes !=null)
+            if (bookTypes != null)
             {
                 query = query.Where(b => bookTypes.Contains(b.Category));
             }
@@ -34,15 +34,13 @@ namespace BookProject.API.Controllers
                     query = query.OrderBy(b => b.Title);
                 }
             }
-
             
-            var totalNumBooks = query.Count();
-
+            var totalNumBooks = await query.CountAsync();
             
-            var books = query
+            var books = await query
                 .Skip((pageNum - 1) * pageHowMany)
                 .Take(pageHowMany)
-                .ToList();
+                .ToListAsync();
 
             BookListData response = new BookListData
             {
@@ -52,15 +50,88 @@ namespace BookProject.API.Controllers
             
             return Ok(response);
         }
+        
         [HttpGet("GetBookTypes")]
-        public IActionResult GetBookTypes ()
+        public async Task<IActionResult> GetBookTypes()
         {
-            var bookTypes = _bookContext.Books
+            var bookTypes = await _bookContext.Books
                 .Select(p => p.Category)
                 .Distinct()
-                .ToList();
+                .ToListAsync();
 
             return Ok(bookTypes);
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBook(int id)
+        {
+            var book = await _bookContext.Books.FirstOrDefaultAsync(b => b.BookID == id);
+            
+            if (book == null)
+            {
+                return NotFound(new { message = $"Book with ID {id} not found" });
+            }
+            
+            return Ok(book);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] Book book)
+        {
+            if (book == null)
+            {
+                return BadRequest(new { message = "Book data is required" });
+            }
+            
+            _bookContext.Books.Add(book);
+            await _bookContext.SaveChangesAsync();
+            
+            return CreatedAtAction(nameof(GetBook), new { id = book.BookID }, book);
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] Book book)
+        {
+            if (book == null || id != book.BookID)
+            {
+                return BadRequest(new { message = "Invalid book data or ID mismatch" });
+            }
+            
+            var existingBook = await _bookContext.Books.FirstOrDefaultAsync(b => b.BookID == id);
+            
+            if (existingBook == null)
+            {
+                return NotFound(new { message = $"Book with ID {id} not found" });
+            }
+            
+            existingBook.Title = book.Title;
+            existingBook.Author = book.Author;
+            existingBook.Publisher = book.Publisher;
+            existingBook.ISBN = book.ISBN;
+            existingBook.Classification = book.Classification;
+            existingBook.Category = book.Category;
+            existingBook.PageCount = book.PageCount;
+            existingBook.Price = book.Price;
+            
+            await _bookContext.SaveChangesAsync();
+            
+            return Ok(existingBook);
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            var book = await _bookContext.Books.FindAsync(id);
+            
+            if (book == null)
+            {
+                return NotFound(new { message = $"Book with ID {id} not found" });
+            }
+            
+            _bookContext.Books.Remove(book);
+            await _bookContext.SaveChangesAsync();
+            
+            return Ok(new { message = $"Book with ID {id} deleted successfully" });
         }
     }
 }

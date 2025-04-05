@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Book } from '../types/Book';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { fetchBooks } from '../api/ProjectsAPI';
+import Pagination from './Pagination';
 
 function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
   const [books, setBooks] = useState<Book[]>([]);
@@ -46,27 +48,17 @@ function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
   };
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const categoryParams = selectedCategories
-        .map((cat) => `bookTypes=${encodeURIComponent(cat)}`)
-        .join('&');
+    const loadBooks = async () => {
       try {
         setIsLoading(true);
-
-        const sortParam = isSorted
-          ? `&sortByTitle=true&sortDirection=${sortDirection}`
-          : '';
-        const response = await fetch(
-          `https://localhost:5000/api/Book/AllProjects?pageHowMany=${pageSize}&pageNum=${currentPage}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ''}`
+        const data = await fetchBooks(
+          pageSize,
+          currentPage,
+          selectedCategories,
+          isSorted,
+          sortDirection
         );
-
-        if (!response.ok) {
-          throw new Error(
-            `API error: ${response.status} ${response.statusText}`
-          );
-        }
-
-        const data = await response.json();
+        
         setBooks(data.books);
         setTotalItems(data.totalNumBooks);
         setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
@@ -80,7 +72,7 @@ function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
       }
     };
 
-    fetchBooks();
+    loadBooks();
   }, [pageSize, currentPage, sortDirection, isSorted, selectedCategories]);
 
   return (
@@ -138,42 +130,21 @@ function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
           </div>
         </div>
       ))}
-      <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-        Previous
-      </button>
-
-      {[...Array(totalPages)].map((_, index) => (
-        <button
-          key={index + 1}
-          onClick={() => setCurrentPage(index + 1)}
-          disabled={currentPage === index + 1}
-        >
-          {index + 1}
-        </button>
-      ))}
-
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage(currentPage + 1)}
-      >
-        Next
-      </button>
-
-      <br />
-      <label>
-        Results per page:
-        <select
-          value={pageSize}
-          onChange={(p) => {
-            setPageSize(Number(p.target.value));
-            setCurrentPage(1);
-          }}
-        >
-          <option value="5"> 5 </option>
-          <option value="10"> 10 </option>
-          <option value="20"> 20 </option>
-        </select>
-      </label>
+      
+      {!isLoading && !error && books.length > 0 && (
+        <div className="mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+      )}
 
     </>
   );
