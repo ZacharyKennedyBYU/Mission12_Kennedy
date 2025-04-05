@@ -3,7 +3,6 @@ import { Book } from "../types/Book";
 import { addBook, deleteBook, fetchBooks, getBook, updateBook } from "../api/ProjectsAPI";
 import Pagination from "../components/Pagination";
 import BookForm from "../components/BookForm";
-import { Link } from "react-router-dom";
 import "./AdminBookPage.css";
 
 const AdminBookPage = () => {

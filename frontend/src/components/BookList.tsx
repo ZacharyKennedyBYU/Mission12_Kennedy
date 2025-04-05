@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Book } from '../types/Book';
 import { useCart } from '../context/CartContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchBooks } from '../api/ProjectsAPI';
 import Pagination from './Pagination';
 
@@ -10,7 +10,6 @@ function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [pageSize, setPageSize] = useState<number>(5);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [isSorted, setIsSorted] = useState<boolean>(false);
@@ -60,7 +59,6 @@ function ProjectList({ selectedCategories }: { selectedCategories: string[] }) {
         );
         
         setBooks(data.books);
-        setTotalItems(data.totalNumBooks);
         setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
         setError(null);
       } catch (err) {
